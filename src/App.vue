@@ -1,34 +1,24 @@
 <script setup>
+import { ref, computed } from "vue";
+
 import Header from "./components/header/Header.vue";
 import Balance from "./components/balance/Balance.vue";
 import IncomeExpense from "./components/incomeExpense/IncomeExpense.vue";
-import Transactionlist from "./components/transactionList/TransactionList.vue";
 import AddTransaction from "./components/addTransaction/AddTransaction.vue";
+import Transactionlist from "./components/transactionList/TransactionList.vue";
 
-import { ref, computed } from "vue";
+let transactions = ref([]);
 
-const transactions = ref([
-  {
-    id: 1,
-    text: "Cash",
-    amount: -400,
-  },
-  {
-    id: 2,
-    text: "Book",
-    amount: -20,
-  },
-  {
-    id: 3,
-    text: "Salary",
-    amount: 1000,
-  },
-]);
+const handleAddTransaction = (transaction) => {
+  transactions.value = [...transactions.value, transaction];
+};
 
 const transactionsTotal = computed(() => {
-  return transactions.value.reduce((acc, transaction) => {
-    return acc + transaction.amount;
-  }, 0);
+  return transactions.value
+    .reduce((acc, transaction) => {
+      return acc + transaction.amount;
+    }, 0)
+    .toFixed(2);
 });
 
 const incomesTotal = computed(() => {
@@ -40,7 +30,7 @@ const incomesTotal = computed(() => {
       return acc + income.amount;
     }, 0);
 
-  return incomes;
+  return incomes.toFixed(2);
 });
 
 const expenseTotal = computed(() => {
@@ -52,17 +42,17 @@ const expenseTotal = computed(() => {
       return acc + expense.amount;
     }, 0);
 
-  return expenses;
+  return expenses.toFixed(2);
 });
 </script>
 
 <template>
   <Header />
   <div class="container">
-    <Balance :balance="transactionsTotal" />
-    <IncomeExpense :income="incomesTotal" :expense="expenseTotal" />
+    <Balance :balance="+transactionsTotal" />
+    <IncomeExpense :income="+incomesTotal" :expense="+expenseTotal" />
     <Transactionlist :transactions="transactions" />
-    <AddTransaction />
+    <AddTransaction @add-transaction="handleAddTransaction" />
   </div>
 </template>
 
