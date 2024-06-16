@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useToast } from "vue-toast-notification";
 
 import Header from "./components/header/Header.vue";
@@ -8,12 +8,27 @@ import IncomeExpense from "./components/incomeExpense/IncomeExpense.vue";
 import AddTransaction from "./components/addTransaction/AddTransaction.vue";
 import Transactionlist from "./components/transactionList/TransactionList.vue";
 
+const $toast = useToast();
+const localStorageKey = "transactions";
+
 let transactions = ref([]);
 
-const $toast = useToast();
+onMounted(() => {
+  const savedTransactions = JSON.parse(localStorage.getItem(localStorageKey));
+
+  if (savedTransactions) {
+    transactions.value = savedTransactions;
+  }
+});
+
+const saveTransactions = () => {
+  localStorage.setItem(localStorageKey, JSON.stringify(transactions.value));
+};
 
 const handleAddTransaction = (transaction) => {
   transactions.value = [transaction, ...transactions.value];
+
+  saveTransactions();
 };
 
 const handleDeleteTransaction = (id) => {
@@ -22,6 +37,9 @@ const handleDeleteTransaction = (id) => {
   );
 
   transactions.value = updatedTransactions;
+
+  saveTransactions();
+
   $toast.success("Transaction deleted successfully");
 };
 
@@ -63,7 +81,10 @@ const expenseTotal = computed(() => {
   <div class="container">
     <Balance :balance="+transactionsTotal" />
     <IncomeExpense :income="+incomesTotal" :expense="+expenseTotal" />
-    <Transactionlist :transactions="transactions" @delete-transaction="handleDeleteTransaction" />
+    <Transactionlist
+      :transactions="transactions"
+      @delete-transaction="handleDeleteTransaction"
+    />
     <AddTransaction @add-transaction="handleAddTransaction" />
   </div>
 </template>
