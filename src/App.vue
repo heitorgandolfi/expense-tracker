@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from "vue";
+import { useToast } from "vue-toast-notification";
 
 import Header from "./components/header/Header.vue";
 import Balance from "./components/balance/Balance.vue";
@@ -9,8 +10,19 @@ import Transactionlist from "./components/transactionList/TransactionList.vue";
 
 let transactions = ref([]);
 
+const $toast = useToast();
+
 const handleAddTransaction = (transaction) => {
   transactions.value = [transaction, ...transactions.value];
+};
+
+const handleDeleteTransaction = (id) => {
+  const updatedTransactions = transactions.value.filter(
+    (transaction) => transaction.id !== id
+  );
+
+  transactions.value = updatedTransactions;
+  $toast.success("Transaction deleted successfully");
 };
 
 const transactionsTotal = computed(() => {
@@ -51,7 +63,7 @@ const expenseTotal = computed(() => {
   <div class="container">
     <Balance :balance="+transactionsTotal" />
     <IncomeExpense :income="+incomesTotal" :expense="+expenseTotal" />
-    <Transactionlist :transactions="transactions" />
+    <Transactionlist :transactions="transactions" @delete-transaction="handleDeleteTransaction" />
     <AddTransaction @add-transaction="handleAddTransaction" />
   </div>
 </template>

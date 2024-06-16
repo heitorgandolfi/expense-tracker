@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from "vue";
 
+const emit = defineEmits(["delete-transaction"]);
 const props = defineProps({
   transactions: {
     type: Array,
@@ -29,7 +30,7 @@ const hasTransactions = computed(() => props.transactions.length > 0);
         :class="getTransactionType(amount)"
       >
         {{ text }} <span>$ {{ amount }}</span>
-        <button class="delete-btn">x</button>
+        <button class="delete-btn" @click="$emit('delete-transaction', id)">x</button>
       </li>
     </ul>
   </div>
