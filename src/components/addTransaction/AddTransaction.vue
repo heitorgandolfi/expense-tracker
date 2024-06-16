@@ -3,10 +3,10 @@ import { ref } from "vue";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
+const emit = defineEmits(["add-transaction"]);
+
 const transactionText = ref("");
 const transactionAmount = ref(null);
-
-const emit = defineEmits(["add-transaction"]);
 
 const $toast = useToast();
 

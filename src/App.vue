@@ -10,7 +10,7 @@ import Transactionlist from "./components/transactionList/TransactionList.vue";
 let transactions = ref([]);
 
 const handleAddTransaction = (transaction) => {
-  transactions.value = [...transactions.value, transaction];
+  transactions.value = [transaction, ...transactions.value];
 };
 
 const transactionsTotal = computed(() => {
