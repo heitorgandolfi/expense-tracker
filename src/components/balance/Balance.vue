@@ -10,5 +10,11 @@ const props = defineProps({
 
 <template>
   <h4>Your Balance</h4>
-  <h1 id="balance">$ {{ props.balance }}</h1>
+  <h1 id="balance">${{ props.balance }}</h1>
 </template>
+
+<style scoped>
+#balance {
+  margin-top: 0.5rem;
+}
+</style>

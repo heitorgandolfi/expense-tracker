@@ -18,7 +18,7 @@ const hasTransactions = computed(() => props.transactions.length > 0);
 <template>
   <div class="transaction-list">
     <h3>History</h3>
-    <p v-if="hasTransactions" class="empty-list">
+    <p v-if="!hasTransactions" class="empty-list">
       You don't have any transactions yet.
     </p>
 
